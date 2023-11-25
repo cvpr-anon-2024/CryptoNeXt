@@ -27,7 +27,10 @@ def build_dataset(is_train, args):
             print(t)
     print("---------------------------")
 
-    if args.data_set == 'CIFAR':
+    if args.data_set == 'CIFAR10':
+        dataset = datasets.CIFAR10(args.data_path, train=is_train, transform=transform, download=True)
+        nb_classes = 10
+    elif args.data_set == 'CIFAR':
         dataset = datasets.CIFAR100(args.data_path, train=is_train, transform=transform, download=True)
         nb_classes = 100
     elif args.data_set == 'IMNET':
@@ -35,6 +38,10 @@ def build_dataset(is_train, args):
         root = os.path.join(args.data_path, 'train' if is_train else 'val')
         dataset = datasets.ImageFolder(root, transform=transform)
         nb_classes = 1000
+    elif args.data_set == 'tiny':
+        root = args.data_path if is_train else args.eval_data_path
+        dataset = datasets.ImageFolder(root, transform=transform)
+        nb_classes = 200
     elif args.data_set == "image_folder":
         root = args.data_path if is_train else args.eval_data_path
         dataset = datasets.ImageFolder(root, transform=transform)
@@ -53,6 +60,18 @@ def build_transform(is_train, args):
     mean = IMAGENET_INCEPTION_MEAN if not imagenet_default_mean_and_std else IMAGENET_DEFAULT_MEAN
     std = IMAGENET_INCEPTION_STD if not imagenet_default_mean_and_std else IMAGENET_DEFAULT_STD
 
+    if args.data_set == 'tiny':
+        mean = (0.485, 0.456, 0.406)
+        std = (0.229, 0.224, 0.225)
+    elif args.data_set == "CIFAR": # C-100
+        mean = (0.5071, 0.4866, 0.4409)
+        std = (0.2673, 0.2564, 0.2762)
+    elif args.data_set == "CIFAR10":
+        mean = (0.4914, 0.4822, 0.4465)
+        std = (0.2470, 0.2435, 0.2616)
+
+    if args.train_interpolation == 'bicubic':
+        interpolation = transforms.InterpolationMode.BICUBIC
     if is_train:
         # this should always dispatch to transforms_imagenet_train
         transform = create_transform(
@@ -60,7 +79,7 @@ def build_transform(is_train, args):
             is_training=True,
             color_jitter=args.color_jitter,
             auto_augment=args.aa,
-            interpolation=args.train_interpolation,
+            interpolation=interpolation,
             re_prob=args.reprob,
             re_mode=args.remode,
             re_count=args.recount,
