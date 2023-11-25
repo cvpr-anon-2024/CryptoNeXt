@@ -1,3 +1,33 @@
+# Code for CryptoNeXt: Rethinking Private Inference in Terms of Normalization
+This is a fork of the ConvNeXt repo. `convnext.py`, `datasets.py`, and `main.py` were modified to run our experiments.
+
+## Reproducing main results from the paper. 
+Please install ConvNeXt by following their instructions in `INSTALL.MD`. Below, we will show how to reproduce the `cifar10` results using 2 GPUs. For the other datasets, adjust the dataset parameters and change the model (see the defined models in `convnext.py`). 
+
+1. Baseline
+```python
+python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
+```
+2. `Quad` activation
+```python
+python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
+```
+3. Block-wise `LayerNorm` -> `BatchNorm`, Stage-wise `LayerNorm` -> compute `H x W` normalization factors
+```python
+python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad_HW --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
+```
+4. Stage-wise `LayerNorm` -> compute `C` normalization factors
+```python
+python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad_C --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
+```
+5. Stage-wise `LayerNorm` -> compute `3` normalization factors
+```python
+python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad_3 --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
+```
+
+# ConvNeXt README BELOW:
+
+
 # [A ConvNet for the 2020s](https://arxiv.org/abs/2201.03545)
 
 Official PyTorch implementation of **ConvNeXt**, from the following paper:
