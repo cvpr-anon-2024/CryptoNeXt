@@ -6,23 +6,23 @@ Please install ConvNeXt by following their instructions in `INSTALL.MD`. Below, 
 
 1. Baseline
 ```python
-python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
+python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR10 --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
 ```
 2. `Quad` activation
 ```python
-python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
+python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR10 --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
 ```
 3. Block-wise `LayerNorm` -> `BatchNorm`, Stage-wise `LayerNorm` -> compute `H x W` normalization factors
 ```python
-python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad_HW --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
+python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad_HW --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR10 --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
 ```
 4. Stage-wise `LayerNorm` -> compute `C` normalization factors
 ```python
-python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad_C --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
+python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad_C --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR10 --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
 ```
 5. Stage-wise `LayerNorm` -> compute `3` normalization factors
 ```python
-python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad_3 --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
+python -m torch.distributed.launch --nproc_per_node=2 main.py --local_rank=0 --model convnext_tiny_cifar_quad_3 --drop_path 0.1 --batch_size 128 --lr 4e-3 --update_freq 1 --output_dir output --enable_wandb True --wandb_ckpt True --input_size 32 --data_set CIFAR10 --data_path ./data --eval_data_path ./data --nb_classes 10 --auto_resume False
 ```
 
 # ConvNeXt README BELOW:
